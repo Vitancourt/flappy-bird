@@ -48,10 +48,31 @@ export class Input {
     bind('btn-right', onRight);
     bind('btn-flap', onFlap);
 
-    // Tapping the open screen also flaps on touch (and starts/restarts the game)
-    document.getElementById('game').addEventListener('pointerdown', (e) => {
-      if (this.touch) { e.preventDefault(); onFlap(); }
+    // On touch, a tap on the open screen flaps and a horizontal swipe moves (one lane / turn per swipe).
+    const SWIPE = 36; // px of sideways travel that counts as a swipe
+    const canvas = document.getElementById('game');
+    let drag = null;
+    canvas.addEventListener('pointerdown', (e) => {
+      if (!this.touch) return;
+      e.preventDefault();
+      drag = { id: e.pointerId, x: e.clientX, y: e.clientY, swiped: false };
     });
+    canvas.addEventListener('pointermove', (e) => {
+      if (!drag || e.pointerId !== drag.id || drag.swiped) return;
+      const dx = e.clientX - drag.x, dy = e.clientY - drag.y;
+      if (Math.abs(dx) >= SWIPE && Math.abs(dx) > Math.abs(dy)) {
+        drag.swiped = true; // acts as soon as the finger has travelled far enough
+        (dx < 0 ? onLeft : onRight)();
+      }
+    });
+    canvas.addEventListener('pointerup', (e) => {
+      if (!drag || e.pointerId !== drag.id) return;
+      const wasSwipe = drag.swiped;
+      drag = null;
+      e.preventDefault();
+      if (!wasSwipe) onFlap();
+    });
+    canvas.addEventListener('pointercancel', () => { drag = null; });
     // desktop mouse click also flaps, for convenience
     document.getElementById('game').addEventListener('mousedown', () => {
       if (!this.touch) onFlap();

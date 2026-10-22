@@ -63,10 +63,10 @@ resize();
 
 // --- tutorial: practise each command with the bird hovering over the live scene ---
 const STEPS = {
-  flap: { key: 'flap', title: 'Flap your wings', desktop: 'Press Space, \u2191 or W (or click)', touch: 'Tap the FLAP button (or anywhere)' },
-  left: { key: 'left', title: 'Move left', desktop: 'Press \u2190 or A to switch to the left lane', touch: 'Tap \u25c0 to switch to the left lane' },
-  right: { key: 'right', title: 'Move right', desktop: 'Press \u2192 or D to switch to the right lane', touch: 'Tap \u25b6 to switch to the right lane' },
-  turn: { key: 'turn', title: 'Turn at a street', desktop: 'Press \u2190 (or \u2192) twice in a row: pressing again in the outer lane turns you 90\u00b0 over a street', touch: 'Tap \u25c0 (or \u25b6) twice in a row: pressing again in the outer lane turns you 90\u00b0 over a street' },
+  flap: { key: 'flap', title: 'Flap your wings', desktop: 'Press Space, \u2191 or W (or click)', touch: 'Tap the FLAP button (or tap the screen)' },
+  left: { key: 'left', title: 'Move left', desktop: 'Press \u2190 or A to switch to the left lane', touch: 'Swipe left (or tap \u25c0) to switch to the left lane' },
+  right: { key: 'right', title: 'Move right', desktop: 'Press \u2192 or D to switch to the right lane', touch: 'Swipe right (or tap \u25b6) to switch to the right lane' },
+  turn: { key: 'turn', title: 'Turn at a street', desktop: 'Press \u2190 (or \u2192) twice in a row: pressing again in the outer lane turns you 90\u00b0 over a street', touch: 'Swipe (or tap \u25c0 \u25b6) twice the same way: pressing again in the outer lane turns you 90\u00b0 over a street' },
   pause: { key: 'pause', title: 'Pause any time', desktop: 'Press Esc or P', touch: 'Tap the pause button at the top right' },
 };
 const FINISH = {
