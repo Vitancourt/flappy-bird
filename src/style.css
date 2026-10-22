@@ -1,0 +1,182 @@
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+  background: #9fd8ff;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  color: #fff;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: none;
+  overscroll-behavior: none;
+}
+
+#vignette {
+  position: fixed; inset: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0) 55%, rgba(8, 14, 30, .38) 100%);
+}
+
+#fps {
+  position: fixed;
+  top: max(10px, env(safe-area-inset-top));
+  right: max(12px, env(safe-area-inset-right));
+  padding: 4px 9px;
+  border-radius: 8px;
+  background: rgba(10, 16, 30, .55);
+  font: 600 13px/1.2 ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  letter-spacing: .02em;
+  pointer-events: none;
+  z-index: 5;
+}
+#fps[data-level="good"] { color: #8dff9c; }
+#fps[data-level="ok"] { color: #ffd966; }
+#fps[data-level="bad"] { color: #ff7a6b; }
+
+#game { position: fixed; inset: 0; width: 100%; height: 100%; display: block; }
+
+#hud {
+  position: fixed;
+  top: max(12px, env(safe-area-inset-top));
+  left: 0; right: 0;
+  text-align: center;
+  pointer-events: none;
+  text-shadow: 0 3px 0 rgba(0, 0, 0, .25);
+}
+#score { font-size: 64px; font-weight: 800; line-height: 1; }
+#best { font-size: 16px; opacity: .9; margin-top: 4px; }
+
+.screen {
+  position: fixed; inset: 0;
+  display: none;
+  flex-direction: column; align-items: center; justify-content: center;
+  gap: 12px;
+  text-align: center;
+  padding: 16px;
+  text-shadow: 0 3px 0 rgba(0, 0, 0, .3);
+  pointer-events: none;
+}
+.screen.show { display: flex; }
+.screen.modal { pointer-events: auto; background: rgba(20, 30, 60, .45); }
+.screen h1 { margin: 0; font-size: clamp(36px, 9vw, 72px); }
+.screen p { margin: 0; }
+.sub { font-size: clamp(16px, 4vw, 22px); opacity: .9; }
+.big { font-size: clamp(32px, 9vw, 64px); font-weight: 800; }
+.hint { font-size: clamp(14px, 3.6vw, 18px); opacity: .9; }
+.best-line { opacity: .85; font-size: 16px; }
+#screen-gameover { background: rgba(20, 30, 60, .35); }
+#screen-gameover .btn-col { pointer-events: auto; margin-top: 8px; }
+
+.hint-touch { display: none; }
+body.touch .hint-desktop { display: none; }
+body.touch .hint-touch { display: block; }
+
+#mode-list, .btn-col { display: flex; flex-direction: column; gap: 12px; width: min(320px, 100%); }
+.menu-btn {
+  font: inherit; font-size: 20px; font-weight: 700;
+  color: #fff;
+  padding: 16px 20px;
+  border-radius: 16px;
+  border: 3px solid rgba(255, 255, 255, .85);
+  background: rgba(255, 255, 255, .2);
+  cursor: pointer;
+  text-shadow: 0 2px 0 rgba(0, 0, 0, .25);
+}
+.menu-btn small { display: block; font-size: 13px; font-weight: 500; opacity: .85; margin-top: 4px; }
+.menu-btn.primary { background: rgba(255, 190, 40, .75); border-color: #fff; }
+.menu-btn:hover { background: rgba(255, 255, 255, .35); }
+.menu-btn.primary:hover { background: rgba(255, 190, 40, .95); }
+.menu-btn:active { transform: translateY(2px); }
+
+.icon-btn {
+  position: fixed;
+  top: calc(max(10px, env(safe-area-inset-top)) + 36px);
+  right: max(12px, env(safe-area-inset-right));
+  width: 48px; height: 48px;
+  border-radius: 50%;
+  border: 3px solid rgba(255, 255, 255, .85);
+  background: rgba(255, 255, 255, .22);
+  color: #fff; font-size: 16px; font-weight: 800; letter-spacing: -2px;
+  display: none; align-items: center; justify-content: center;
+  cursor: pointer;
+  touch-action: none;
+}
+body[data-screen="none"] #btn-pause { display: flex; }
+
+/* mode-specific hints (hint-desktop / hint-touch rules above still pick the device) */
+body[data-mode="city"] .mode-classic,
+body[data-mode="classic"] .mode-city { display: none !important; }
+.hint { max-width: 460px; }
+
+/* city mini-map */
+#minimap {
+  position: fixed;
+  top: max(12px, env(safe-area-inset-top));
+  left: max(12px, env(safe-area-inset-left));
+  width: 150px; height: 150px;
+  border-radius: 15px;
+  border: 3px solid rgba(255, 255, 255, .85);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, .3);
+  display: none;
+  pointer-events: none;
+}
+body[data-mode="city"]:not([data-screen="menu"]) #minimap { display: block; }
+@media (max-width: 520px) { #minimap { width: 108px; height: 108px; } }
+
+.popup {
+  position: fixed;
+  left: 50%; top: 30%;
+  transform: translateX(-50%);
+  font-size: 44px; font-weight: 800; color: #ffd23f;
+  text-shadow: 0 3px 0 rgba(0, 0, 0, .35);
+  pointer-events: none;
+  animation: popup .9s ease-out forwards;
+}
+@keyframes popup {
+  from { opacity: 1; transform: translate(-50%, 0) scale(.8); }
+  to { opacity: 0; transform: translate(-50%, -70px) scale(1.2); }
+}
+
+/* HUD / touch controls only while a run is on screen */
+body[data-screen="menu"] #hud { display: none; }
+body[data-screen="menu"] #controls,
+body[data-screen="pause"] #controls,
+body[data-screen="caught"] #controls,
+body[data-screen="gameover"] #controls { display: none !important; }
+
+/* On-screen buttons: only shown on touch devices (body.touch set in input.js) */
+#controls { display: none; }
+body.touch #controls {
+  position: fixed;
+  left: 0; right: 0;
+  bottom: max(16px, env(safe-area-inset-bottom));
+  padding: 0 max(16px, env(safe-area-inset-left));
+  display: flex; align-items: flex-end; justify-content: space-between; gap: 12px;
+}
+.ctl {
+  width: 84px; height: 84px;
+  border-radius: 50%;
+  border: 3px solid rgba(255, 255, 255, .85);
+  background: rgba(255, 255, 255, .22);
+  color: #fff;
+  font-size: 28px; font-weight: 800;
+  backdrop-filter: blur(4px);
+  touch-action: none;
+}
+.ctl:active, .ctl.down { background: rgba(255, 255, 255, .5); }
+.ctl-flap { flex: 1; max-width: 220px; height: 100px; border-radius: 50px; font-size: 24px; letter-spacing: 2px; background: rgba(255, 190, 40, .55); }
+
+/* tutorial */
+.link-btn { font-size: 16px; padding: 10px 18px; margin-top: 4px; }
+#screen-tutorial { justify-content: flex-start; padding-top: 14vh; }
+.tut-card { background: rgba(20, 30, 60, .6); border-radius: 20px; padding: 14px 22px; display: flex; flex-direction: column; gap: 8px; align-items: center; max-width: min(560px, 100%); }
+.tut-card .big { font-size: clamp(26px, 7vw, 44px); }
+body[data-screen="tutorial"] #hud, body[data-screen="offer"] #hud, body[data-screen="skipask"] #hud { display: none; }
+#screen-tutorial .hint { font-size: clamp(16px, 4vw, 22px); max-width: 520px; }
+#tut-title { animation: tutpop .35s ease-out; }
+@keyframes tutpop { from { transform: scale(.85); opacity: 0; } to { transform: none; opacity: 1; } }
+.tut-skip { pointer-events: auto; position: fixed; left: 50%; transform: translateX(-50%); font-size: 15px; padding: 8px 16px; bottom: calc(max(16px, env(safe-area-inset-bottom)) + 130px); }
+body:not(.touch) .tut-skip { bottom: 28px; }
+body[data-screen="tutorial"] #btn-pause { display: flex; }

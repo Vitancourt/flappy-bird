@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+  <meta name="theme-color" content="#9fd8ff" />
+  <title>City Canyon Flappy</title>
+</head>
+<body>
+  <canvas id="game"></canvas>
+
+  <div id="vignette"></div>
+  <div id="fps">-- FPS</div>
+
+  <div id="hud">
+    <div id="score">0</div>
+    <div id="best">Best 0</div>
+  </div>
+  <canvas id="minimap" width="300" height="300"></canvas>
+  <button id="btn-pause" class="icon-btn" data-action="pause" aria-label="Pause">&#10074;&#10074;</button>
+
+  <!-- screens: exactly one is visible at a time (see ui.js) -->
+  <div class="screen modal" id="screen-menu">
+    <h1>City Canyon</h1>
+    <p class="sub">Choose a game</p>
+    <div id="mode-list"></div>
+    <p class="best-line" id="menu-best"></p>
+  </div>
+
+  <div class="screen modal" id="screen-offer">
+    <h1 id="offer-title">New here?</h1>
+    <p class="sub">Learn the controls in under a minute.</p>
+    <div class="btn-col">
+      <button class="menu-btn primary" data-action="tutorial">Play tutorial</button>
+      <button class="menu-btn" data-action="skipTutorial">Skip tutorial</button>
+    </div>
+  </div>
+
+  <div class="screen modal" id="screen-skipask">
+    <h1 id="skip-title">Skip the tutorial?</h1>
+    <p class="sub">Do you want to never see it again?<br />You can still open it from the main menu ("How to play" under each game).</p>
+    <div class="btn-col">
+      <button class="menu-btn primary" data-action="skipNever">Yes, never show it again</button>
+      <button class="menu-btn" data-action="skipOnce">No, just skip this time</button>
+    </div>
+  </div>
+
+  <div class="screen" id="screen-tutorial">
+    <div class="tut-card">
+      <p class="hint" id="tut-count"></p>
+      <p class="big" id="tut-title"></p>
+      <p class="hint hint-desktop" id="tut-desktop"></p>
+      <p class="hint hint-touch" id="tut-touch"></p>
+    </div>
+    <button class="menu-btn tut-skip" data-action="tutorialSkip">Skip tutorial</button>
+  </div>
+
+  <div class="screen" id="screen-ready">
+    <p class="big">Get ready</p>
+    <p class="hint hint-desktop mode-classic">Press Space or &uarr; to flap &middot; &larr; &rarr; change lane &middot; watch the windows: people try to net you!</p>
+    <p class="hint hint-touch mode-classic">Tap FLAP to start &middot; &#9664; &#9654; change lane &middot; watch the windows: people try to net you!</p>
+    <p class="hint hint-desktop mode-city">Space or &uarr; flap &middot; &larr; &rarr; change lane &middot; press again in the outer lane to turn 90&deg; over a street. Dodge traffic, balloons and planes, watch the windows for people with nets, and grab the gold bird food (+10).</p>
+    <p class="hint hint-touch mode-city">Tap FLAP to start &middot; &#9664; &#9654; change lane &middot; press again in the outer lane to turn 90&deg; over a street. Dodge traffic, balloons and planes, watch the windows for people with nets, and grab the gold bird food (+10).</p>
+  </div>
+
+  <div class="screen" id="screen-countdown">
+    <p class="big" id="countdown-num">3</p>
+  </div>
+
+  <div class="screen" id="screen-caught"></div>
+
+  <div class="screen modal" id="screen-pause">
+    <h1>Paused</h1>
+    <div class="btn-col">
+      <button class="menu-btn primary" data-action="resume">Resume</button>
+      <button class="menu-btn" data-action="restart">Restart</button>
+      <button class="menu-btn" data-action="menu">Main menu</button>
+    </div>
+  </div>
+
+  <div class="screen" id="screen-gameover">
+    <h1 id="go-title">Crashed</h1>
+    <p class="big" id="go-score"></p>
+    <div class="btn-col">
+      <button class="menu-btn primary" data-action="restart">Play again</button>
+      <button class="menu-btn" data-action="menu">Main menu</button>
+    </div>
+  </div>
+
+  <div id="controls" aria-hidden="true">
+    <button id="btn-left" class="ctl">&#9664;</button>
+    <button id="btn-flap" class="ctl ctl-flap">FLAP</button>
+    <button id="btn-right" class="ctl">&#9654;</button>
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
